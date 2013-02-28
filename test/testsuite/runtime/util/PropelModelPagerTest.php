@@ -57,6 +57,17 @@ class PropelModelPagerTest extends BookstoreEmptyTestBase
         $this->assertEquals(false, $this->getPager(5)->haveToPaginate(), 'haveToPaginate() returns false when the maxPerPage is equal to the number of results');
     }
 
+	public function testHaveToPaginateWithMany()
+	{
+		BookQuery::create()->deleteAll();
+		$this->assertEquals(false, $this->getPagerWithMany(0)->haveToPaginate(), 'haveToPaginate() returns false when there is no result');
+		$this->createBooks(5);
+		$this->assertEquals(false, $this->getPagerWithMany(0)->haveToPaginate(), 'haveToPaginate() returns false when the maxPerPage is null');
+		$this->assertEquals(true, $this->getPagerWithMany(2)->haveToPaginate(), 'haveToPaginate() returns true when the maxPerPage is less than the number of results');
+		$this->assertEquals(false, $this->getPagerWithMany(6)->haveToPaginate(), 'haveToPaginate() returns false when the maxPerPage is greater than the number of results');
+		$this->assertEquals(false, $this->getPagerWithMany(5)->haveToPaginate(), 'haveToPaginate() returns false when the maxPerPage is equal to the number of results');
+	}
+
     public function testGetNbResults()
     {
         BookQuery::create()->deleteAll();
